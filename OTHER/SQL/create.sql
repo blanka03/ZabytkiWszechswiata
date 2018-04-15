@@ -83,6 +83,7 @@ CREATE TABLE Obiekt (
 	rodzaj_obiektu INTEGER,
 	status_prawny INTEGER,
 	wspolrzedne_id INTEGER,
+	czy_zaakceptowane INTEGER,
 	CONSTRAINTS fk_adres_id FOREIGN KEY (adres_id) REFERENCES Adres (adres_id),
 	CONSTRAINTS fk_autor_id FOREIGN KEY (autor_id) REFERENCES Uzytkownik (uzytkownik_id),
 	CONSTRAINTS fk_wlasciciel_id FOREIGN KEY (wlasciciel_id) REFERENCES Wlasciciel (wlasciciel_id),
