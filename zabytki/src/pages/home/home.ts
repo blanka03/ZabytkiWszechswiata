@@ -24,7 +24,7 @@ export class HomePage {
   }*/
 
   ionViewWillEnter() {
-    this.displayGoogleMap();
+    //this.displayGoogleMap();
   }
 
   displayGoogleMap() {
@@ -54,7 +54,8 @@ export class HomePage {
       this.map = new google.maps.Map(this.mapContainer.nativeElement, mapOptions);
       this.addMarker();
     }, (err) => {
-      console.log(err);
+      console.log(err.message);
+      console.log("chujek");
     });
   }
 
