@@ -1,6 +1,9 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
+import { AddObjectPage } from "../add-object/add-object";
+import {HttpClient} from '@angular/common/http';
+
 
 declare var google;
 
@@ -14,27 +17,24 @@ export class HomePage {
 
   @ViewChild('map') mapContainer: ElementRef;
   map: any;
-  constructor(public navCtrl: NavController, public geolocation: Geolocation) {
+  apiUrl = 'http://localhost:3000';
+  constructor(public http: HttpClient, public navCtrl: NavController, public geolocation: Geolocation) {
 
   }
 
-
-  /*ionViewDidEnter() {
-    this.loadmap();
-  }*/
 
   ionViewWillEnter() {
     this.displayGoogleMap();
   }
 
   displayGoogleMap() {
+    let latLng;// = new google.maps.LatLng(57.8127004, 14.2106225);
     this.geolocation.getCurrentPosition().then((position) => {
-      let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
+      latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
       let mapOptions = {
         center: latLng,
-        disableDefaultUI: true,
-        zoom: 11,
+        //disableDefaultUI: true,
+        zoom: 15,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         styles: [
           {
@@ -53,6 +53,7 @@ export class HomePage {
       }
       this.map = new google.maps.Map(this.mapContainer.nativeElement, mapOptions);
       this.addMarker();
+
     }, (err) => {
       console.log(err);
     });
@@ -65,7 +66,7 @@ export class HomePage {
       position: this.map.getCenter()
     });
 
-    let content = "<h4>Information!</h4>";
+    let content = "<h4>Zabytek!</h4>";
 
     this.addInfoWindow(marker, content);
   }
@@ -77,12 +78,23 @@ export class HomePage {
     });
 
     google.maps.event.addListener(marker, 'click', () => {
+      infoWindow.setContent('<p>Nazwa: ' + '</p>' +
+        '<p>' + '</p>' +
+        '<p>Funkcja: ' + '</p>' +
+        '<p>Data powstania: ' + '</p>' +
+        '<p>Rodzaj: ' + '</p>' +
+        '<p>Status: ' + '</p>' +
+        '<button id="x" >Monument</button>');
+      infoWindow.addListener('domready', () => {
+        document.getElementById("x").addEventListener("click", () => {
+          this.goToMonument();
+        });
+      });
       infoWindow.open(this.map, marker);
     });
-
   }
 
-
+  goToMonument(){
+    this.navCtrl.push(AddObjectPage);
+  }
 }
-
-

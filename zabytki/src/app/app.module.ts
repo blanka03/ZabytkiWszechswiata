@@ -8,14 +8,18 @@ import { SpinnerDialog } from '@ionic-native/spinner-dialog';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/zaloguj/zaloguj';
+import { LoginPage } from '../pages/login/login';
+import { AcceptPage } from "../pages/accept/accept";
+import { AddObjectPage } from "../pages/add-object/add-object";
 
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    ListPage
+    LoginPage,
+    AcceptPage,
+    AddObjectPage
   ],
   imports: [
     BrowserModule,
@@ -25,7 +29,9 @@ import { ListPage } from '../pages/zaloguj/zaloguj';
   entryComponents: [
     MyApp,
     HomePage,
-    ListPage
+    LoginPage,
+    AcceptPage,
+    AddObjectPage
   ],
   providers: [
     StatusBar,
