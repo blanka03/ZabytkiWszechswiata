@@ -24,6 +24,9 @@ export class LoginPage {
       this.navCtrl.push(AddObjectPage);
     }
   }
+  update(){
+    window.location.reload();
+  }
 
   goRegister() {
     if(this.registerCredential.username.length==0 || this.registerCredential.password.length==0 || this.registerCredential.password2.length==0) {

@@ -2,8 +2,7 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { AddObjectPage } from "../add-object/add-object";
-import {HttpClient} from '@angular/common/http';
-
+import { RestProvider } from "../../providers/rest/rest";
 
 declare var google;
 
@@ -12,16 +11,20 @@ declare var google;
   templateUrl: 'home.html'
 })
 
-
 export class HomePage {
-
   @ViewChild('map') mapContainer: ElementRef;
   map: any;
-  apiUrl = 'http://localhost:3000';
-  constructor(public http: HttpClient, public navCtrl: NavController, public geolocation: Geolocation) {
-
+  monuments: any;
+  constructor(public restProvider: RestProvider, public navCtrl: NavController, public geolocation: Geolocation) {
+    this.getMonuments();
   }
 
+  getMonuments() {
+    this.restProvider.getMonuments().then(data => {
+        this.monuments = data;
+        console.log(this.monuments);
+      });
+  }
 
   ionViewWillEnter() {
     this.displayGoogleMap();
@@ -92,6 +95,10 @@ export class HomePage {
       });
       infoWindow.open(this.map, marker);
     });
+  }
+
+  addMarkers() {
+
   }
 
   goToMonument(){

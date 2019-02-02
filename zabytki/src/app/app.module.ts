@@ -5,12 +5,15 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Geolocation } from '@ionic-native/geolocation';
 import { SpinnerDialog } from '@ionic-native/spinner-dialog';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 import { AcceptPage } from "../pages/accept/accept";
 import { AddObjectPage } from "../pages/add-object/add-object";
+import { RestProvider } from '../providers/rest/rest';
+
 
 
 @NgModule({
@@ -24,6 +27,7 @@ import { AddObjectPage } from "../pages/add-object/add-object";
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
+    HttpClientModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -38,7 +42,8 @@ import { AddObjectPage } from "../pages/add-object/add-object";
     SplashScreen,
     Geolocation,
     SpinnerDialog,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    RestProvider
   ]
 })
 export class AppModule {}
