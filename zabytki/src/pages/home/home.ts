@@ -56,6 +56,7 @@ export class HomePage {
       }
       this.map = new google.maps.Map(this.mapContainer.nativeElement, mapOptions);
       this.addMarker();
+      //this.addMarkers();
 
     }, (err) => {
       console.log(err);
@@ -63,29 +64,33 @@ export class HomePage {
   }
 
   addMarker() {
-    let marker = new google.maps.Marker({
-      map: this.map,
-      animation: google.maps.Animation.DROP,
-      position: this.map.getCenter()
-    });
+    for(var i in this.monuments) {
+      let latLng = new google.maps.LatLng((this.monuments[i].coordinates).latitude, (this.monuments[i].coordinates).longitude);
+      let marker = new google.maps.Marker({
+        map: this.map,
+        animation: google.maps.Animation.DROP,
+        position: {lat: (this.monuments[i].coordinates).latitude, lng: (this.monuments[i].coordinates).longitude }
+      });
 
-    let content = "<h4>Zabytek!</h4>";
+      let content = "<h4>Zabytek!</h4>";
 
-    this.addInfoWindow(marker, content);
+      this.addInfoWindow(marker, content, this.monuments[i]);
+    }
   }
 
-  addInfoWindow(marker, content){
+  addInfoWindow(marker, content, object){
 
     let infoWindow = new google.maps.InfoWindow({
       content: content
     });
 
     google.maps.event.addListener(marker, 'click', () => {
-      infoWindow.setContent('<p>Nazwa: ' + '</p>' +
-        '<p>' + '</p>' +
-        '<p>Funkcja: ' + '</p>' +
-        '<p>Data powstania: ' + '</p>' +
-        '<p>Rodzaj: ' + '</p>' +
+      infoWindow.setContent('<p>Nazwa: ' + object.name +'</p>' +
+        '<p>' + " " +'</p>' +
+        '<p>Funkcja: ' + object.function +'</p>' +
+        '<p>Data powstania: ' + object.creationDate + '</p>' +
+        '<p>Adres: ' + (object.address).street + ' ' + object.address.houseNumber + ' ' + object.address.flatNumber  +'</p>' +
+        '<p>' +object.address.postCode + ' ' + object.address.city + '</p>' +
         '<p>Status: ' + '</p>' +
         '<button id="x" >Monument</button>');
       infoWindow.addListener('domready', () => {
@@ -98,7 +103,9 @@ export class HomePage {
   }
 
   addMarkers() {
-
+    for(var prop in this.monuments) {
+      console.log(prop + "|" + this.monuments[prop].name)
+    }
   }
 
   goToMonument(){

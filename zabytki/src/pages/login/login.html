@@ -13,7 +13,7 @@
       <form #registerForm="ngForm">
         <ion-list inset>
           <ion-item>
-            <ion-input placeholder="Login" [(ngModel)]="loginCredential.username" [ngModelOptions]="{standalone: true}"></ion-input>
+            <ion-input placeholder="Login" [(ngModel)]="loginCredential.login" [ngModelOptions]="{standalone: true}"></ion-input>
           </ion-item>
           <ion-item>
             <ion-input placeholder="Hasło" type="password" [(ngModel)]="loginCredential.password" [ngModelOptions]="{standalone: true}"></ion-input>
@@ -24,13 +24,19 @@
 
       <ion-list>
         <ion-item name ="signIn">
-          <ion-input placeholder="Login" [(ngModel)]="registerCredential.username" [ngModelOptions]="{standalone: true}"></ion-input>
+          <ion-input placeholder="Login" [(ngModel)]="registerCredential.login" [ngModelOptions]="{standalone: true}"></ion-input>
         </ion-item>
         <ion-item>
           <ion-input placeholder="Hasło" type="password" [(ngModel)]="registerCredential.password" [ngModelOptions]="{standalone: true}"></ion-input>
         </ion-item>
         <ion-item>
           <ion-input placeholder="Powtórz hasło" type="password" [(ngModel)]="registerCredential.password2" [ngModelOptions]="{standalone: true}"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input placeholder="Imię"[(ngModel)]="registerCredential.name" [(ngModel)]="registerCredential.name" [ngModelOptions]="{standalone: true}"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input placeholder="Nazwisko" [(ngModel)]="registerCredential.surname" [(ngModel)]="registerCredential.surname" [ngModelOptions]="{standalone: true}"></ion-input>
         </ion-item>
       </ion-list>
       <button ion-button full (click)="goRegister()">Zarejestruj</button>

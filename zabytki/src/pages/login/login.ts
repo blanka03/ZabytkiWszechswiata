@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, AlertController } from 'ionic-angular';
 import {AddObjectPage} from "../add-object/add-object";
+import { RestProvider } from "../../providers/rest/rest";
 
 @Component({
   selector: 'page-login',
@@ -8,16 +9,20 @@ import {AddObjectPage} from "../add-object/add-object";
 })
 export class LoginPage {
 
-  loginCredential = { username: '', password: ''};
-  registerCredential = {username: '', password: '', password2: ''}
+  loginCredential = { login: '', password: ''};
+  registerCredential = {login: '', password: '', password2: '', name: '', surname: ''}
 
 
-  constructor(public navCtrl: NavController, private alertCtrl: AlertController) {
+  constructor(public restProvider: RestProvider, public navCtrl: NavController, private alertCtrl: AlertController) {
 
   }
 
+  sendRegister(newUser) {
+    this.restProvider.addUser(newUser);
+  }
+
   goLogin() {
-    if(this.loginCredential.username.length==0 || this.loginCredential.password.length==0) {
+    if(this.loginCredential.login.length==0 || this.loginCredential.password.length==0) {
       this.showError("Wypełnij wszystkie pola");
     }
     else {
@@ -29,11 +34,20 @@ export class LoginPage {
   }
 
   goRegister() {
-    if(this.registerCredential.username.length==0 || this.registerCredential.password.length==0 || this.registerCredential.password2.length==0) {
+    if(this.registerCredential.login.length==0 || this.registerCredential.password.length==0 || this.registerCredential.password2.length==0 || this.registerCredential.name.length==0 || this.registerCredential.surname.length==0) {
       this.showError("Wypełnij wszystkie pola");
     }
-    if(this.registerCredential.password != this.registerCredential.password2) {
+    else if(this.registerCredential.password != this.registerCredential.password2) {
       this.showError("Hasła są różne");
+    }
+    else {
+      let newUser = {
+        "login": this.registerCredential.login,
+        "name": this.registerCredential.name,
+        "surname": this.registerCredential.surname,
+        "password": this.registerCredential.password
+      }
+      this.sendRegister(newUser);
     }
   }
 
