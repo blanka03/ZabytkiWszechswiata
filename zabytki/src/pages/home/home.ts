@@ -30,13 +30,16 @@ export class HomePage {
     this.displayGoogleMap();
   }
 
+  ionViewDidLoad() {
+    this.displayGoogleMap();
+  }
+
   displayGoogleMap() {
     let latLng;// = new google.maps.LatLng(57.8127004, 14.2106225);
     this.geolocation.getCurrentPosition().then((position) => {
       latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
       let mapOptions = {
         center: latLng,
-        //disableDefaultUI: true,
         zoom: 15,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         styles: [
@@ -85,7 +88,7 @@ export class HomePage {
     });
 
     google.maps.event.addListener(marker, 'click', () => {
-      infoWindow.setContent('<p>Nazwa: ' + object.name +'</p>' +
+      infoWindow.setContent('<p>Nazwa: ' +object.name +'</p>' +
         '<p>' + " " +'</p>' +
         '<p>Funkcja: ' + object.function +'</p>' +
         '<p>Data powstania: ' + object.creationDate + '</p>' +

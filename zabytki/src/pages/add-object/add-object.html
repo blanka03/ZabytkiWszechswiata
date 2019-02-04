@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Dodaj Obiekt</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+    <div #map id="map" style="width:50%; height:90%; margin:0; float: left" ></div>
+  <div name="form" style="font-size:9px; width:40%; height:90%; margin: 0; float: right;">
+    <ion-list inset>
+      <ion-item>
+        <ion-input require="true" placeholder="Nazwa" [(ngModel)]="object.name" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input placeholder="Funkcja" [(ngModel)]="object.function" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input placeholder="Ulica" [(ngModel)]="object.street" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input placeholder="Nr budynku" [(ngModel)]="object.houseNumber" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input placeholder="Nr mieszkania" [(ngModel)]="object.flatNumber" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input placeholder="Kod pocztowy" [(ngModel)]="object.postCode" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input placeholder="Miasto" [(ngModel)]="object.city" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input placeholder="Data Powstania" [(ngModel)]="object.date" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input placeholder="Źródła" [(ngModel)]="object.sources" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input placeholder="Rodzaj obiektu" [(ngModel)]="object.genre" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input placeholder="Status prawny" [(ngModel)]="object.status" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+    </ion-list>
+    <button ion-button full (click)="goAdd()">Dodaj!</button>
+  </div>
+
+</ion-content>

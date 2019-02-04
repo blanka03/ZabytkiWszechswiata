@@ -13,6 +13,7 @@ import { LoginPage } from '../pages/login/login';
 import { AcceptPage } from "../pages/accept/accept";
 import { AddObjectPage } from "../pages/add-object/add-object";
 import { RestProvider } from '../providers/rest/rest';
+import { AuthServiceProvider } from '../providers/auth-service/auth-service';
 
 
 
@@ -43,7 +44,8 @@ import { RestProvider } from '../providers/rest/rest';
     Geolocation,
     SpinnerDialog,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    RestProvider
+    RestProvider,
+    AuthServiceProvider
   ]
 })
 export class AppModule {}

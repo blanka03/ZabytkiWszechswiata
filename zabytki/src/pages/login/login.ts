@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, AlertController } from 'ionic-angular';
-import {AddObjectPage} from "../add-object/add-object";
+import { AddObjectPage } from "../add-object/add-object";
 import { RestProvider } from "../../providers/rest/rest";
+import { AuthServiceProvider } from "../../providers/auth-service/auth-service";
 
 @Component({
   selector: 'page-login',
@@ -12,13 +13,33 @@ export class LoginPage {
   loginCredential = { login: '', password: ''};
   registerCredential = {login: '', password: '', password2: '', name: '', surname: ''}
 
-
-  constructor(public restProvider: RestProvider, public navCtrl: NavController, private alertCtrl: AlertController) {
-
+  constructor(public authService: AuthServiceProvider, public restProvider: RestProvider, public navCtrl: NavController, private alertCtrl: AlertController) {
   }
 
+  loginUser(result) {
+    this.authService.login(result.login, result.token);
+    this.navCtrl.push(AddObjectPage);
+  }
   sendRegister(newUser) {
-    this.restProvider.addUser(newUser);
+    this.restProvider.addUser(newUser).then((result) => {
+      console.log(result);
+      this.showError("Konto zostało utworzone, zaloguj się!");
+      return result;
+    }, (err) => {
+      console.log(err);
+      this.showError("Coś poszło nie tak, spróbuj jeszcze raz!");
+    });
+  }
+
+  sendLogin(user) {
+    this.restProvider.logIn(user).then((result) => {
+      console.log(result);
+      this.loginUser(result);
+      return result;
+    }, (err) => {
+      console.log(err);
+      this.showError("Błędny login lub hasło!");
+    });
   }
 
   goLogin() {
@@ -26,11 +47,12 @@ export class LoginPage {
       this.showError("Wypełnij wszystkie pola");
     }
     else {
-      this.navCtrl.push(AddObjectPage);
+      let user = {
+        login: this.loginCredential.login,
+        password: this.loginCredential.password
+      }
+      this.sendLogin(user);
     }
-  }
-  update(){
-    window.location.reload();
   }
 
   goRegister() {
@@ -42,22 +64,25 @@ export class LoginPage {
     }
     else {
       let newUser = {
-        "login": this.registerCredential.login,
-        "name": this.registerCredential.name,
-        "surname": this.registerCredential.surname,
-        "password": this.registerCredential.password
+        login: this.registerCredential.login,
+        name: this.registerCredential.name,
+        surname: this.registerCredential.surname,
+        password: this.registerCredential.password
       }
       this.sendRegister(newUser);
     }
   }
 
   showError(text) {
-
     let alert = this.alertCtrl.create({
       title: 'Fail',
       subTitle: text,
       buttons: ['OK']
     });
     alert.present();
+  }
+
+  update() {
+    window.location.reload();
   }
 }

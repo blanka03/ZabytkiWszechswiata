@@ -11,6 +11,8 @@ import { AddObjectPage } from "../pages/add-object/add-object";
 @Component({
   templateUrl: 'app.html'
 })
+
+
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
