@@ -9,7 +9,6 @@
 
 
 <ion-content padding>
-
     <div #map id="map" style="width:50%; height:90%; margin:0; float: left" ></div>
   <div name="form" style="font-size:9px; width:40%; height:90%; margin: 0; float: right;">
     <ion-list inset>
@@ -35,10 +34,13 @@
         <ion-input placeholder="Miasto" [(ngModel)]="object.city" [ngModelOptions]="{standalone: true}"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-input placeholder="Data Powstania" [(ngModel)]="object.date" [ngModelOptions]="{standalone: true}"></ion-input>
+        <ion-input placeholder="Kraj" [(ngModel)]="object.country" [ngModelOptions]="{standalone: true}"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-input placeholder="Źródła" [(ngModel)]="object.sources" [ngModelOptions]="{standalone: true}"></ion-input>
+        <ion-input placeholder="Data Powstania" [(ngModel)]="object.creationDate" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input placeholder="Źródła" [(ngModel)]="object.archivalSource" [ngModelOptions]="{standalone: true}"></ion-input>
       </ion-item>
       <ion-item>
         <ion-input placeholder="Rodzaj obiektu" [(ngModel)]="object.genre" [ngModelOptions]="{standalone: true}"></ion-input>

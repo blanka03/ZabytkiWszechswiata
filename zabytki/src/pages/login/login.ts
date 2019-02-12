@@ -11,14 +11,14 @@ import { AuthServiceProvider } from "../../providers/auth-service/auth-service";
 export class LoginPage {
 
   loginCredential = { login: '', password: ''};
-  registerCredential = {login: '', password: '', password2: '', name: '', surname: ''}
+  registerCredential = { login: '', password: '', password2: '', name: '', surname: ''}
 
   constructor(public authService: AuthServiceProvider, public restProvider: RestProvider, public navCtrl: NavController, private alertCtrl: AlertController) {
   }
 
   loginUser(result) {
-    this.authService.login(result.login, result.token);
-    this.navCtrl.push(AddObjectPage);
+    this.authService.login(result.login, result.token, result.superUser);
+    this.navCtrl.setRoot(AddObjectPage);
   }
   sendRegister(newUser) {
     this.restProvider.addUser(newUser).then((result) => {

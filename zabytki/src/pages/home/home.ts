@@ -1,7 +1,6 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { AlertController, Events, NavController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
-import { AddObjectPage } from "../add-object/add-object";
 import { RestProvider } from "../../providers/rest/rest";
 
 declare var google;
@@ -15,27 +14,31 @@ export class HomePage {
   @ViewChild('map') mapContainer: ElementRef;
   map: any;
   monuments: any;
-  constructor(public restProvider: RestProvider, public navCtrl: NavController, public geolocation: Geolocation) {
+  constructor(private alertCtrl: AlertController, public events : Events, public restProvider: RestProvider, public navCtrl: NavController, public geolocation: Geolocation) {
     this.getMonuments();
   }
 
   getMonuments() {
-    this.restProvider.getMonuments().then(data => {
-        this.monuments = data;
-        console.log(this.monuments);
-      });
+    this.restProvider.getMonuments().then((data) => {
+      this.monuments = data;
+      this.events.publish('monuments:get', Date.now());
+      console.log(this.monuments);
+      return data;
+    }, (err) => {
+      console.log(err);
+      this.showError("Coś poszło nie tak, spróbuj jeszcze raz!");
+    });
   }
 
+  update() {
+    window.location.reload();
+  }
   ionViewWillEnter() {
     this.displayGoogleMap();
   }
 
-  ionViewDidLoad() {
-    this.displayGoogleMap();
-  }
-
   displayGoogleMap() {
-    let latLng;// = new google.maps.LatLng(57.8127004, 14.2106225);
+    let latLng;
     this.geolocation.getCurrentPosition().then((position) => {
       latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
       let mapOptions = {
@@ -58,9 +61,9 @@ export class HomePage {
         ]
       }
       this.map = new google.maps.Map(this.mapContainer.nativeElement, mapOptions);
-      this.addMarker();
-      //this.addMarkers();
-
+      this.events.subscribe('monuments:get', (time) => {
+        this.addMarker();
+      });
     }, (err) => {
       console.log(err);
     });
@@ -68,39 +71,58 @@ export class HomePage {
 
   addMarker() {
     for(var i in this.monuments) {
-      let latLng = new google.maps.LatLng((this.monuments[i].coordinates).latitude, (this.monuments[i].coordinates).longitude);
-      let marker = new google.maps.Marker({
-        map: this.map,
-        animation: google.maps.Animation.DROP,
-        position: {lat: (this.monuments[i].coordinates).latitude, lng: (this.monuments[i].coordinates).longitude }
-      });
-
-      let content = "<h4>Zabytek!</h4>";
-
-      this.addInfoWindow(marker, content, this.monuments[i]);
+      if(this.monuments[i].approved) {
+        let latLng = new google.maps.LatLng((this.monuments[i].coordinates).latitude, (this.monuments[i].coordinates).longitude);
+        let marker = new google.maps.Marker({
+          map: this.map,
+          animation: google.maps.Animation.DROP,
+          position: {lat: (this.monuments[i].coordinates).latitude, lng: (this.monuments[i].coordinates).longitude}
+        });
+        this.addInfoWindow(marker, this.monuments[i]);
+      }
     }
   }
 
-  addInfoWindow(marker, content, object){
+  addInfoWindow(marker, object){
 
-    let infoWindow = new google.maps.InfoWindow({
-      content: content
-    });
+    let infoWindow = new google.maps.InfoWindow();
 
     google.maps.event.addListener(marker, 'click', () => {
-      infoWindow.setContent('<p>Nazwa: ' +object.name +'</p>' +
-        '<p>' + " " +'</p>' +
-        '<p>Funkcja: ' + object.function +'</p>' +
-        '<p>Data powstania: ' + object.creationDate + '</p>' +
-        '<p>Adres: ' + (object.address).street + ' ' + object.address.houseNumber + ' ' + object.address.flatNumber  +'</p>' +
-        '<p>' +object.address.postCode + ' ' + object.address.city + '</p>' +
-        '<p>Status: ' + '</p>' +
-        '<button id="x" >Monument</button>');
-      infoWindow.addListener('domready', () => {
-        document.getElementById("x").addEventListener("click", () => {
-          this.goToMonument();
-        });
-      });
+      let content = '<p>Nazwa: ' +object.name +'</p>';
+      if (object.function != null) {
+        content += '<p>Funkcja: ' + object.function +'</p>';
+      }
+      if (object.creationDate != null) {
+        content += '<p>Data powstania: ' + object.creationDate +'</p>';
+      }
+      if ((object.address).street != null) {
+        content += '<p>Adres: ' + (object.address).street;
+      }
+      if ((object.address).houseNumber != null) {
+        content += ' ' +(object.address).houseNumber;
+      }
+      if ((object.address).flatNumber != null) {
+        content += ' ' +(object.address).flatNumber;
+      }
+      content += '</p><p>'
+      if ((object.address).postCode != null) {
+        content += ' ' +(object.address).postCode;
+      }
+      if ((object.address).city != null) {
+        content += ' ' +(object.address).city;
+      }
+      content +='</p>';
+      if (object.archivalSource != null) {
+        content += '<p>Źródła archiwalne: ' + object.archivalSource +'</p>';
+      }
+      if (object.status != null) {
+
+        content += '<p>Status prawny: ' + object.status +'</p>';
+      }
+      if (object.type != null) {
+        content += '<p>Rodzaj: ' + object.type +'</p>';
+      }
+      infoWindow.setContent(content);
       infoWindow.open(this.map, marker);
     });
   }
@@ -111,7 +133,12 @@ export class HomePage {
     }
   }
 
-  goToMonument(){
-    this.navCtrl.push(AddObjectPage);
+  showError(text) {
+    let alert = this.alertCtrl.create({
+      title: 'Fail',
+      subTitle: text,
+      buttons: ['OK']
+    });
+    alert.present();
   }
 }
